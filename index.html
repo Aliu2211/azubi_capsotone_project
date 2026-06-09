@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group 3 | Cloud Architecture</title>
+    <style>
+        /* Modern, Minimalist CSS Architecture */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #fafafa; 
+            color: #111827; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+        }
+        
+        .container { 
+            max-width: 800px; 
+            padding: 40px; 
+            text-align: center; 
+        }
+        
+        .badge { 
+            display: inline-block; 
+            padding: 8px 16px; 
+            background-color: #f3f4f6; 
+            border-radius: 9999px; 
+            font-size: 0.75rem; 
+            font-weight: 600; 
+            letter-spacing: 0.1em; 
+            text-transform: uppercase; 
+            margin-bottom: 24px; 
+            color: #4b5563; 
+            border: 1px solid #e5e7eb;
+        }
+        
+        h1 { 
+            font-size: 3.5rem; 
+            font-weight: 300; 
+            letter-spacing: -0.03em; 
+            margin-bottom: 16px; 
+        }
+        
+        h1 span { 
+            font-weight: 600; 
+        }
+        
+        p { 
+            font-size: 1.125rem; 
+            color: #6b7280; 
+            line-height: 1.6; 
+            margin-bottom: 48px; 
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .image-card { 
+            background: #ffffff; 
+            border: 1px solid #f3f4f6; 
+            border-radius: 16px; 
+            padding: 16px; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025); 
+            transition: transform 0.4s ease, box-shadow 0.4s ease; 
+        }
+        
+        .image-card:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+        }
+        
+        .image-card img { 
+            max-width: 100%; 
+            border-radius: 12px; 
+            height: auto; 
+            background-color: #f9fafb;
+        }
+        
+        .s3-caption {
+            margin-top: 16px; 
+            font-size: 0.875rem; 
+            color: #9ca3af; 
+            font-weight: 400;
+        }
+        
+        .footer-info { 
+            margin-top: 48px; 
+            font-size: 0.875rem; 
+            color: #d1d5db; 
+        }
+        
+        .server-status { 
+            display: inline-flex; 
+            align-items: center; 
+            margin-top: 32px; 
+            padding: 8px 20px; 
+            background: #ffffff;
+            border: 1px solid #e5e7eb; 
+            border-radius: 12px;
+            font-size: 0.875rem;
+            color: #374151;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        
+        .dot { 
+            width: 8px; 
+            height: 8px; 
+            background-color: #10b981; 
+            border-radius: 50%; 
+            margin-right: 12px; 
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.8); 
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="badge">End-to-End Cloud Solution</div>
+        
+        <h1>Group 3 <span>Architecture</span></h1>
+        
+        <p>Seamlessly routed by an Application Load Balancer, secured via CloudFront edge locations, and deployed with high availability.</p>
+
+        <div class="image-card">
+            <img src="https://capstone-s3-343073438650-us-east-1-an.s3.us-east-1.amazonaws.com/Screenshot%20From%202026-06-09%2020-33-45.png?response-content-disposition=inline&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEA0aCXVzLWVhc3QtMSJGMEQCIHw1xjdt8BLVtMV4wCQFv4GDyBo6rqOtU%2FBwNkvAyYJcAiBMKniZECwj71bqdQWNcU2e1LETBstEGrFwljuR1tYsuSrXAwjW%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAAaDDM0MzA3MzQzODY1MCIMKDVyaWmV13Ymu1UUKqsDWXzFU5YeC%2Fj3yJFkvMzDC0rN%2F7AE4y2dtbbsQFH7nnETY1EZaBCk4y%2F1bkt6yf2QHAuEkPbzH0p4bq9U8X7lS37bodDC8SpFdwt0alrklbjXcUOPGzhu8sGBKW4g9IKizTpE1kqAFDW9mDWbXXLwxM1%2BxLcUVEFSx7Y51YAJLlPH8pt%2FWye%2F8ed0L8eBejt%2BxZrTqzh6l0hw%2B51tu8JCXhyrsUAHjlEnqZcxrm2TY%2FxLNXywAwfb1SqzptzmOIQeb8Hh34ibIIHBcVcVxuWe3Z0eBMPt2ubYHStF0ELvsktBvk3dCn%2BVKg8NT0tIJkE1UmyHNY5z404uFzZcZYmr2afD2iES4V2jrFOWI5qXpmiHM5tZaGBeBlNd3vB4uaNxdM59r25%2FNmPVmjxC5iaXj2Jsw1Xr6HrIZR0treeVdZhJTXh1WXgOgCI5gyXfDPqmutJi1Vi%2F%2BAKSZAhc5FV3xH3YXB9iRachVzjB6G2cs%2FzHXY3vmjXEqa3fT226%2BMgNCrMhtbtiC6zD9Zno4r5hDdVlQMQD4jg%2BS2KLeu7rX%2BiIp8XLzJ7segRknjDCyqHRBjrfAlNTWjC0uV5zZHdsniDrpdnif6UXgUZtpD%2Fb%2BtlXgSxRa%2BdKG6jAdgfI4T0KS9MQdC7llP0tZUeiNq8u2m%2F%2Bw7PK%2F7ejfyPAYwbmyeLAA8iBLN5cfs3FHutiINQMv7GaI%2BclGmY2jVvinrtzLTkxW%2B56fpEUJXZjUjJ3PwERLAzHH4I1Xa0dlXCslPS0CE10tS7suvZVtmj300R5ftObqGMyIWOrISJjN%2BHPQ5Q%2BIUtlaWissYU2DVheONKWvLQa3ebaGaFIiE6XictwqfdnMaBiVSN8HQTxd5RU5Vh6Z3lc1GrdtMMBcrJ7XffxVw7YiEyuJFnWJUUM7g4KFGxaqSW0DXQU00MLo9YQ%2F%2FKY%2BvreKXsI%2FVi3%2FmdnVTyq2ZAmt0%2BvSo90EyC2tmzeVBIROs82klw8rJB5DuZZd8UrkWt1N6V8vuYODgMddlLJh3Eza4R8D47s2igfaJGFnexByQ%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=ASIAU7YGFHO5F4LVDDVG%2F20260609%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260609T204117Z&X-Amz-Expires=14400&X-Amz-SignedHeaders=host&X-Amz-Signature=555fcd80343a1a442e44c270e1feb63f5adbaf1887646a522c62ec53d1e29449" alt="S3 Stored Asset">
+            <div class="s3-caption">Static asset delivered dynamically from Amazon S3</div>
+        </div>
+
+        <div class="server-status">
+            <div class="dot" id="status-dot" style="background-color: #d1d5db; box-shadow: none;"></div>
+            <span id="server-id">Establishing connection...</span>
+        </div>
+
+        <div class="footer-info">
+            Developed by Group 3 • CI/CD Automated
+        </div>
+    </div>
+
+    <script>
+        // JavaScript logic to simulate health check rendering
+        document.addEventListener('DOMContentLoaded', () => {
+            const statusText = document.getElementById('server-id');
+            const statusDot = document.getElementById('status-dot');
+            
+            setTimeout(() => {
+                statusText.innerText = "Target Healthy • ALB Routing Active";
+                statusDot.style.backgroundColor = "#10b981";
+                statusDot.style.boxShadow = "0 0 12px rgba(16, 185, 129, 0.8)";
+            }, 1200);
+        });
+    </script>
+</body>
+</html>
