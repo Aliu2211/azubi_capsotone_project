@@ -4,8 +4,8 @@
 CloudFront → ALB → EC2 (Amazon Linux 2, t2.micro)
 
 ## AWS Resources
-- EC2: capstone-web-server (t2.micro, eu-north-1)
-- S3: capstone-static-aliu-2026
+- EC2: Web-Server (t2.micro, eu-north-1)
+- S3: capstone-s3-343073438650-us-east-1-an
 - ALB: capstone-alb
 - CloudFront: Distribution pointing to ALB
 
