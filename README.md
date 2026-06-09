@@ -16,3 +16,6 @@ CloudFront → ALB → EC2 (Amazon Linux 2, t2.micro)
 
 ## Team
 - Aliu Tijani — AWS Console Admin
+- Manu Adam Onyina — AWS Console Admin
+- Freda Ofori — AWS Console Admin
+- Caleb Ohene Asare — AWS Console Admin
