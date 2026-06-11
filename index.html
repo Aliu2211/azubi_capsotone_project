@@ -26,7 +26,6 @@
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="guide.html">Implementation Guide</a></li>
-                <li><a href="guide.html#phase-5" class="nav-cta">View Presentation</a></li>
             </ul>
         </div>
     </header>
@@ -36,16 +35,17 @@
         <!-- Hero -->
         <section class="hero">
             <div class="container">
-                <div class="hero-badge">Azubi AWS Cloud Engineering Bootcamp · Capstone</div>
-                <h1>Deploy a <span>Scalable</span> Web App on AWS</h1>
+                <div class="hero-badge">Azubi AWS Cloud Engineering Bootcamp &middot; Capstone &middot; Group 3</div>
+                <h1>Group 3 <span>Architecture</span></h1>
                 <p class="hero-lead">
-                    This site is the documentation <em>and</em> the demo. We solve one problem:
-                    <strong>how to build a secure, globally available, auto-scaling web application on AWS within the Free Tier</strong>
-                    — using CloudFront, ALB, EC2, S3, and GitHub Actions.
+                    Served via CloudFront CDN &middot; Routed by ALB &middot; Hosted on EC2 &middot; Deployed by GitHub Actions
                 </p>
-                <div class="hero-actions">
-                    <a href="guide.html" class="btn btn-primary">Read the Full Guide →</a>
-                    <a href="YOUR_CLOUDFRONT_URL" class="btn btn-secondary" target="_blank" rel="noopener">Live CloudFront URL ↗</a>
+                <div class="arch-image-wrap">
+                    <img src="architecture.png"
+                         alt="AWS Architecture Diagram — CloudFront, ALB, EC2, S3, GitHub Actions">
+                    <p class="arch-image-caption">
+                        Static assets (CSS, JS, images) delivered directly from Amazon S3
+                    </p>
                 </div>
                 <div class="status-strip">
                     <div class="status-badge" id="badge-https">
@@ -69,6 +69,10 @@
                         <span id="server-id">Connecting to EC2…</span>
                     </div>
                 </div>
+                <div class="hero-actions" style="margin-top: 24px;">
+                    <a href="guide.html" class="btn btn-primary">Read the Full Guide &rarr;</a>
+                    <a href="https://cloud.badexhq.com" class="btn btn-secondary" target="_blank" rel="noopener">Live CloudFront URL &#x2197;</a>
+                </div>
             </div>
         </section>
 
@@ -86,72 +90,25 @@
                 </div>
                 <div class="card-grid">
                     <article class="feature-card">
-                        <div class="feature-icon orange">🎯</div>
+                        <div class="feature-icon">🎯</div>
                         <h3>The Challenge</h3>
                         <p>Deploy a production-style web app that is secure, scalable, globally cached, and automatically deployed — all within AWS Free Tier limits.</p>
                     </article>
                     <article class="feature-card">
-                        <div class="feature-icon blue">📖</div>
+                        <div class="feature-icon">📖</div>
                         <h3>Our Solution</h3>
                         <p>A living documentation site that teaches the architecture while demonstrating it live — served via CloudFront, balanced by ALB, hosted on EC2.</p>
                     </article>
                     <article class="feature-card">
-                        <div class="feature-icon green">🌍</div>
+                        <div class="feature-icon">🌍</div>
                         <h3>Who It's For</h3>
                         <p>Bootcamp interns, junior cloud engineers, and anyone replicating a capstone-style end-to-end AWS deployment from scratch.</p>
                     </article>
                     <article class="feature-card">
-                        <div class="feature-icon purple">⚡</div>
+                        <div class="feature-icon">⚡</div>
                         <h3>What You'll Learn</h3>
                         <p>CloudFront → ALB → EC2 request flow, S3 static asset delivery, security hardening, Auto Scaling, CI/CD with GitHub Actions, and cost monitoring.</p>
                     </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Architecture -->
-        <section class="section section-alt" id="architecture">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-label">Architecture</span>
-                    <h2 class="section-title">How traffic flows</h2>
-                    <p class="section-subtitle">
-                        HTML pages are served from EC2 via Apache. CSS, JavaScript, and screenshots are loaded
-                        directly from S3. CloudFront sits in front of the ALB for global HTTPS delivery.
-                    </p>
-                </div>
-                <div class="arch-diagram">
-                    <div class="arch-flow">
-                        <div class="arch-node">
-                            <div class="node-icon">🌐</div>
-                            <div class="node-label">Browser</div>
-                            <div class="node-sub">End user</div>
-                        </div>
-                        <span class="arch-arrow">→</span>
-                        <div class="arch-node accent">
-                            <div class="node-icon">☁️</div>
-                            <div class="node-label">CloudFront</div>
-                            <div class="node-sub">CDN + HTTPS</div>
-                        </div>
-                        <span class="arch-arrow">→</span>
-                        <div class="arch-node">
-                            <div class="node-icon">⚖️</div>
-                            <div class="node-label">ALB</div>
-                            <div class="node-sub">Load balancer</div>
-                        </div>
-                        <span class="arch-arrow">→</span>
-                        <div class="arch-node">
-                            <div class="node-icon">🖥️</div>
-                            <div class="node-label">EC2 ASG</div>
-                            <div class="node-sub">Apache httpd</div>
-                        </div>
-                    </div>
-                    <div class="arch-sidecar">
-                        <span>Static assets (CSS · JS · images) loaded from</span>
-                        <strong>Amazon S3</strong>
-                        <span>· Deployed via</span>
-                        <strong>GitHub Actions</strong>
-                    </div>
                 </div>
             </div>
         </section>
@@ -165,22 +122,22 @@
                 </div>
                 <div class="card-grid">
                     <article class="feature-card">
-                        <div class="feature-icon orange">🔒</div>
+                        <div class="feature-icon">🔒</div>
                         <h3>HTTPS Secured</h3>
                         <p>SSL/TLS via AWS Certificate Manager, enforced at CloudFront with HTTP → HTTPS redirect on the ALB.</p>
                     </article>
                     <article class="feature-card">
-                        <div class="feature-icon blue">⚖️</div>
+                        <div class="feature-icon">⚖️</div>
                         <h3>Load Balanced</h3>
                         <p>Application Load Balancer distributes traffic across EC2 instances with active health checks.</p>
                     </article>
                     <article class="feature-card">
-                        <div class="feature-icon green">🌍</div>
+                        <div class="feature-icon">🌍</div>
                         <h3>CDN Enabled</h3>
                         <p>CloudFront edge locations cache and deliver content globally with low latency.</p>
                     </article>
                     <article class="feature-card">
-                        <div class="feature-icon purple">🔄</div>
+                        <div class="feature-icon">🔄</div>
                         <h3>CI/CD Live</h3>
                         <p>GitHub Actions automatically deploys HTML to EC2 on every push to the main branch.</p>
                     </article>
