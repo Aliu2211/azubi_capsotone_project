@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Step-by-step AWS capstone implementation guide — Phases 1 through 5.">
+    <title>Implementation Guide | Group 3 AWS Docs</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <div class="scroll-progress" aria-hidden="true"></div>
+
+    <header class="site-nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-brand">
+                <span class="brand-icon">G3</span>
+                AWS Scale Docs
+            </a>
+            <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="guide.html" class="active">Implementation Guide</a></li>
+                <li><a href="#phase-5" class="nav-cta">View Presentation</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main id="main">
+        <div class="container guide-layout">
+
+            <!-- Sidebar -->
+            <aside class="guide-sidebar" aria-label="Guide navigation">
+                <h4>Phases</h4>
+                <ul>
+                    <li><a href="#phase-1">Phase 1 — Setup</a></li>
+                    <li><a href="#phase-2">Phase 2 — Web App &amp; ALB</a></li>
+                    <li><a href="#phase-3">Phase 3 — Security &amp; CDN</a></li>
+                    <li><a href="#phase-4">Phase 4 — CI/CD &amp; Monitoring</a></li>
+                    <li><a href="#phase-5">Phase 5 — Presentation</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                </ul>
+            </aside>
+
+            <!-- Content -->
+            <div class="guide-content">
+
+                <div class="section-header" style="padding-top: 8px;">
+                    <span class="section-label">Implementation Guide</span>
+                    <h1 class="section-title">Five phases to a scalable AWS deployment</h1>
+                    <p class="section-subtitle">Follow each phase in order. Screenshot placeholders below tell you exactly what to capture and where to upload it in S3.</p>
+                </div>
+
+                <!-- ═══════════════ PHASE 1 ═══════════════ -->
+                <article class="phase-block" id="phase-1">
+                    <div class="phase-header">
+                        <div class="phase-number">1</div>
+                        <h2>Project Setup &amp; Environment Configuration</h2>
+                    </div>
+                    <p class="phase-goal"><strong>Goal:</strong> Set up all tools, accounts, and repositories so the team can collaborate and deploy to AWS.</p>
+
+                    <ol class="steps">
+                        <li>
+                            <h4>Create IAM users with least-privilege permissions</h4>
+                            <p>In the AWS Console, go to <strong>IAM → Users</strong>. Create one user per team member. Attach only the policies needed for their role (e.g. EC2, S3, CloudFront read/write). Never use the root account for daily work.</p>
+                        </li>
+                        <li>
+                            <h4>Install and configure AWS CLI</h4>
+                            <p>Install the CLI locally and create a named profile for the capstone project.</p>
+                            <div class="code-block"><pre>aws configure --profile capstone
+aws sts get-caller-identity --profile capstone</pre></div>
+                        </li>
+                        <li>
+                            <h4>Create GitHub repository with branching strategy</h4>
+                            <p>Set up <code>main</code>, <code>develop</code>, and feature branches. Protect <code>main</code> with required pull request reviews.</p>
+                        </li>
+                        <li>
+                            <h4>Set up Trello board</h4>
+                            <p>Create columns: <strong>Backlog → In Progress → Review → Done</strong>. Add all capstone tasks from each phase.</p>
+                        </li>
+                        <li>
+                            <h4>Launch EC2 instance and configure security groups</h4>
+                            <p>Launch a <strong>t2.micro</strong> (Amazon Linux 2) in your chosen region. Security group: allow HTTP (80) and HTTPS (443) inbound. Install Apache:</p>
+                            <div class="code-block"><pre>sudo yum update -y
+sudo yum install -y httpd git
+sudo systemctl start httpd
+sudo systemctl enable httpd</pre></div>
+                        </li>
+                        <li>
+                            <h4>Create S3 bucket for static assets</h4>
+                            <p>Create a bucket (e.g. <code>capstone-s3-ACCOUNT_ID-REGION</code>). This will hold <code>style.css</code>, <code>app.js</code>, and screenshots.</p>
+                        </li>
+                        <li>
+                            <h4>Request ACM SSL/TLS certificate</h4>
+                            <p>In <strong>Certificate Manager (us-east-1)</strong>, request a public certificate for your custom domain. Validate via DNS or email.</p>
+                        </li>
+                    </ol>
+
+                    <div class="callout callout-why">
+                        <span class="callout-icon">💡</span>
+                        <div><strong>Why it matters</strong>Least-privilege IAM and a proper branching strategy prevent accidental resource deletion and make collaboration traceable from day one.</div>
+                    </div>
+
+                    <!-- Screenshots Phase 1 -->
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Step 1 — IAM Users</span><span class="filename">phase1-iam-users.png</span></div>
+                        <img src="phase1-iam-users.png" data-filename="phase1-iam-users.png" alt="IAM Users list with least-privilege policies">
+                        <div class="frame-caption">IAM → Users — show all team users and attached policies</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: IAM Users</h4>
+                        <p>Capture after creating IAM users for each team member.</p>
+                        <span class="ph-filename">phase1-iam-users.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> AWS Console → IAM → Users. Include the user list and at least one user's attached policies panel.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Step 2 — AWS CLI</span><span class="filename">phase1-aws-cli.png</span></div>
+                        <img src="phase1-aws-cli.png" data-filename="phase1-aws-cli.png" alt="AWS CLI get-caller-identity output">
+                        <div class="frame-caption">Terminal showing successful <code>aws sts get-caller-identity</code></div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: AWS CLI</h4>
+                        <p>Capture after running <code>aws configure --profile capstone</code>.</p>
+                        <span class="ph-filename">phase1-aws-cli.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> Terminal with <code>aws sts get-caller-identity --profile capstone</code> showing Account, UserId, and Arn.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Step 3 — GitHub Repo</span><span class="filename">phase1-github-repo.png</span></div>
+                        <img src="phase1-github-repo.png" data-filename="phase1-github-repo.png" alt="GitHub repository with branches">
+                        <div class="frame-caption">GitHub repo showing main and develop branches</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: GitHub Repository</h4>
+                        <p>Capture after setting up the repo and branches.</p>
+                        <span class="ph-filename">phase1-github-repo.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> GitHub → Branches page showing <code>main</code>, <code>develop</code>, and at least one feature branch.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Step 4 — Trello Board</span><span class="filename">phase1-trello-board.png</span></div>
+                        <img src="phase1-trello-board.png" data-filename="phase1-trello-board.png" alt="Trello board with sprint columns">
+                        <div class="frame-caption">Trello board with Backlog, In Progress, Review, Done columns</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: Trello Board</h4>
+                        <p>Capture after creating the project board and adding tasks.</p>
+                        <span class="ph-filename">phase1-trello-board.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> Full Trello board view with all four columns and capstone task cards visible.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Step 5 — EC2 Launch</span><span class="filename">phase1-ec2-launch.png</span></div>
+                        <img src="phase1-ec2-launch.png" data-filename="phase1-ec2-launch.png" alt="EC2 instance running">
+                        <div class="frame-caption">EC2 console — running t2.micro with security group rules</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: EC2 Instance</h4>
+                        <p>Capture after launching and starting the web server instance.</p>
+                        <span class="ph-filename">phase1-ec2-launch.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> EC2 → Instances. Show instance state "running", instance type t2.micro, and security group with HTTP/HTTPS rules.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Step 6 — S3 Bucket</span><span class="filename">phase1-s3-bucket.png</span></div>
+                        <img src="phase1-s3-bucket.png" data-filename="phase1-s3-bucket.png" alt="S3 bucket configuration">
+                        <div class="frame-caption">S3 bucket created with appropriate access settings</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: S3 Bucket</h4>
+                        <p>Capture after creating the static assets bucket.</p>
+                        <span class="ph-filename">phase1-s3-bucket.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> S3 → Buckets. Show bucket name, region, and Permissions tab (public access settings or bucket policy).</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Step 7 — ACM Certificate</span><span class="filename">phase1-acm-cert.png</span></div>
+                        <img src="phase1-acm-cert.png" data-filename="phase1-acm-cert.png" alt="ACM certificate status">
+                        <div class="frame-caption">ACM certificate requested in us-east-1</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: ACM Certificate</h4>
+                        <p>Capture after requesting the SSL/TLS certificate.</p>
+                        <span class="ph-filename">phase1-acm-cert.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> Certificate Manager (us-east-1) → Certificates. Show domain name, status (Issued or Pending validation), and type.</div>
+                    </div>
+                </article>
+
+                <!-- ═══════════════ PHASE 2 ═══════════════ -->
+                <article class="phase-block" id="phase-2">
+                    <div class="phase-header">
+                        <div class="phase-number">2</div>
+                        <h2>Web Application Development &amp; Deployment</h2>
+                    </div>
+                    <p class="phase-goal"><strong>Goal:</strong> Build the documentation web app, deploy it on EC2 behind an ALB, and serve static assets from S3.</p>
+
+                    <ol class="steps">
+                        <li>
+                            <h4>Develop the web application</h4>
+                            <p>Create <code>index.html</code> and <code>guide.html</code> (hosted on EC2). Upload <code>style.css</code>, <code>app.js</code>, and screenshot PNGs to the S3 bucket root. Reference them with relative paths in HTML:</p>
+                            <div class="code-block"><pre>&lt;link rel="stylesheet" href="style.css"&gt;
+&lt;script src="app.js" defer&gt;&lt;/script&gt;
+&lt;img src="phase1-iam-users.png" alt="..."&gt;</pre></div>
+                        </li>
+                        <li>
+                            <h4>Clone repo on EC2 and configure Apache</h4>
+                            <div class="code-block"><pre>cd /var/www/html
+sudo git clone https://github.com/YOUR-ORG/YOUR-REPO.git .
+sudo chown -R apache:apache /var/www/html</pre></div>
+                        </li>
+                        <li>
+                            <h4>Create Target Group</h4>
+                            <p>EC2 → Target Groups → Create. Protocol HTTP, port 80. Register your EC2 instance. Set health check path to <code>/</code>.</p>
+                        </li>
+                        <li>
+                            <h4>Create Application Load Balancer</h4>
+                            <p>Internet-facing ALB in public subnets. Listener: HTTP → redirect to HTTPS. HTTPS listener forwards to Target Group with ACM certificate.</p>
+                        </li>
+                        <li>
+                            <h4>Set up Auto Scaling Group (recommended)</h4>
+                            <p>Create a Launch Template from your EC2 instance. ASG min=1, max=2, desired=1. Attach the Target Group for automatic registration.</p>
+                        </li>
+                        <li>
+                            <h4>Upload static assets to S3</h4>
+                            <div class="code-block"><pre>aws s3 cp style.css s3://capstone-s3-343073438650-us-east-1-an/style.css --profile capstone
+aws s3 cp app.js   s3://capstone-s3-343073438650-us-east-1-an/app.js   --profile capstone
+aws s3 sync . s3://capstone-s3-343073438650-us-east-1-an/ --exclude "*" --include "phase*.png" --profile capstone</pre></div>
+                        </li>
+                        <li>
+                            <h4>Verify ALB health checks</h4>
+                            <p>Confirm all registered targets show <strong>healthy</strong> in the Target Group before proceeding to CloudFront.</p>
+                        </li>
+                    </ol>
+
+                    <div class="callout callout-tip">
+                        <span class="callout-icon">💡</span>
+                        <div><strong>Architecture tip</strong>Keep HTML on EC2 (dynamic deploy via git) and static assets on S3 (CSS, JS, images). The browser loads them separately — CloudFront does not pull S3 content onto EC2.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Target Group</span><span class="filename">phase2-alb-target-group.png</span></div>
+                        <img src="phase2-alb-target-group.png" data-filename="phase2-alb-target-group.png" alt="ALB Target Group healthy targets">
+                        <div class="frame-caption">Target Group with registered EC2 instances</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: ALB Target Group</h4>
+                        <span class="ph-filename">phase2-alb-target-group.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> EC2 → Target Groups → Targets tab. Show instance IDs and health status.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>ALB Listeners</span><span class="filename">phase2-alb-listener.png</span></div>
+                        <img src="phase2-alb-listener.png" data-filename="phase2-alb-listener.png" alt="ALB HTTP and HTTPS listeners">
+                        <div class="frame-caption">ALB listeners: HTTP redirect and HTTPS forward</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: ALB Listeners</h4>
+                        <span class="ph-filename">phase2-alb-listener.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> EC2 → Load Balancers → Listeners tab. Show HTTP:80 redirect rule and HTTPS:443 forward rule.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Auto Scaling Group</span><span class="filename">phase2-asg.png</span></div>
+                        <img src="phase2-asg.png" data-filename="phase2-asg.png" alt="Auto Scaling Group configuration">
+                        <div class="frame-caption">ASG with launch template and desired capacity</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: Auto Scaling Group</h4>
+                        <span class="ph-filename">phase2-asg.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> EC2 → Auto Scaling Groups. Show group name, desired/min/max capacity, and attached target group.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>S3 Static Assets</span><span class="filename">phase2-s3-static-assets.png</span></div>
+                        <img src="phase2-s3-static-assets.png" data-filename="phase2-s3-static-assets.png" alt="S3 bucket with static assets">
+                        <div class="frame-caption">S3 objects: style.css, app.js, and screenshot PNGs at bucket root</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: S3 Static Assets</h4>
+                        <span class="ph-filename">phase2-s3-static-assets.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> S3 → Bucket → Objects. Show style.css, app.js, and phase*.png files at bucket root.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Health Check</span><span class="filename">phase2-health-check.png</span></div>
+                        <img src="phase2-health-check.png" data-filename="phase2-health-check.png" alt="Healthy ALB targets">
+                        <div class="frame-caption">All targets showing healthy status</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: ALB Health Check</h4>
+                        <span class="ph-filename">phase2-health-check.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> Target Group → Targets tab with all instances showing green "healthy" status.</div>
+                    </div>
+                </article>
+
+                <!-- ═══════════════ PHASE 3 ═══════════════ -->
+                <article class="phase-block" id="phase-3">
+                    <div class="phase-header">
+                        <div class="phase-number">3</div>
+                        <h2>Security Hardening &amp; CloudFront Integration</h2>
+                    </div>
+                    <p class="phase-goal"><strong>Goal:</strong> Add CloudFront as the CDN layer, enforce HTTPS end-to-end, and lock down security groups and S3 access.</p>
+
+                    <ol class="steps">
+                        <li>
+                            <h4>Create CloudFront distribution</h4>
+                            <p>Origin: your ALB DNS name. Viewer protocol policy: Redirect HTTP to HTTPS. Attach ACM certificate. Enable HTTP/2.</p>
+                        </li>
+                        <li>
+                            <h4>Configure cache behaviors</h4>
+                            <p>Default behavior caches dynamic HTML conservatively. Add a behavior for <code>/static/*</code> or S3 origin with longer TTL for CSS/JS/images.</p>
+                        </li>
+                        <li>
+                            <h4>Restrict EC2 security groups</h4>
+                            <p>Remove open HTTP/HTTPS from 0.0.0.0/0. Add inbound rules using the <strong>com.amazonaws.global.cloudfront.origin-facing</strong> managed prefix list only.</p>
+                        </li>
+                        <li>
+                            <h4>Enable S3 Origin Access Control (OAC)</h4>
+                            <p>Create OAC on the S3 bucket. Update bucket policy to allow only your CloudFront distribution. Block all public S3 access.</p>
+                        </li>
+                        <li>
+                            <h4>Apply least-privilege IAM policies</h4>
+                            <p>Review all IAM roles and policies. Remove unused permissions. Scope S3, EC2, and CloudFront actions to specific resource ARNs.</p>
+                        </li>
+                        <li>
+                            <h4>Test the full HTTPS flow</h4>
+                            <p>Browser → CloudFront URL (padlock) → ALB → EC2. Verify CSS and JS load from S3. Confirm EC2 is unreachable directly from the public internet.</p>
+                        </li>
+                    </ol>
+
+                    <div class="callout callout-security">
+                        <span class="callout-icon">🔒</span>
+                        <div><strong>Security decision</strong>Locking EC2 to CloudFront-only traffic means attackers cannot bypass the CDN and hit your instances directly. OAC ensures S3 assets are only served through CloudFront.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>CloudFront Distribution</span><span class="filename">phase3-cloudfront-dist.png</span></div>
+                        <img src="phase3-cloudfront-dist.png" data-filename="phase3-cloudfront-dist.png" alt="CloudFront distribution with ALB origin">
+                        <div class="frame-caption">CloudFront distribution pointing to ALB origin</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: CloudFront Distribution</h4>
+                        <span class="ph-filename">phase3-cloudfront-dist.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> CloudFront → Distributions. Show distribution domain, status Enabled, and Origins tab with ALB DNS.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Cache Behaviors</span><span class="filename">phase3-cloudfront-behaviors.png</span></div>
+                        <img src="phase3-cloudfront-behaviors.png" data-filename="phase3-cloudfront-behaviors.png" alt="CloudFront cache behaviors">
+                        <div class="frame-caption">Behaviors: HTTPS redirect and cache policies</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: CloudFront Behaviors</h4>
+                        <span class="ph-filename">phase3-cloudfront-behaviors.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> CloudFront → Behaviors tab. Show viewer protocol policy (Redirect HTTP to HTTPS) and cache policy settings.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Security Group</span><span class="filename">phase3-sg-cloudfront-only.png</span></div>
+                        <img src="phase3-sg-cloudfront-only.png" data-filename="phase3-sg-cloudfront-only.png" alt="EC2 security group CloudFront only">
+                        <div class="frame-caption">EC2 SG inbound: CloudFront managed prefix list only</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: Security Group Lockdown</h4>
+                        <span class="ph-filename">phase3-sg-cloudfront-only.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> EC2 → Security Groups → Inbound rules. Show HTTP/HTTPS from <code>com.amazonaws.global.cloudfront.origin-facing</code> prefix list only.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>S3 OAC</span><span class="filename">phase3-s3-oac.png</span></div>
+                        <img src="phase3-s3-oac.png" data-filename="phase3-s3-oac.png" alt="S3 bucket policy with OAC">
+                        <div class="frame-caption">S3 bucket policy allowing CloudFront OAC only</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: S3 Origin Access Control</h4>
+                        <span class="ph-filename">phase3-s3-oac.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> S3 → Bucket → Permissions. Show OAC configuration and bucket policy with CloudFront distribution ARN.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>HTTPS Flow Test</span><span class="filename">phase3-https-flow.png</span></div>
+                        <img src="phase3-https-flow.png" data-filename="phase3-https-flow.png" alt="Browser HTTPS padlock on CloudFront URL">
+                        <div class="frame-caption">Browser address bar: padlock + CloudFront distribution URL</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: HTTPS Flow Test</h4>
+                        <span class="ph-filename">phase3-https-flow.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> Browser showing your CloudFront URL with HTTPS padlock icon and the site loaded correctly.</div>
+                    </div>
+                </article>
+
+                <!-- ═══════════════ PHASE 4 ═══════════════ -->
+                <article class="phase-block" id="phase-4">
+                    <div class="phase-header">
+                        <div class="phase-number">4</div>
+                        <h2>CI/CD Pipeline, Monitoring &amp; Cost Management</h2>
+                    </div>
+                    <p class="phase-goal"><strong>Goal:</strong> Automate deployments with GitHub Actions, set up observability, and monitor Free Tier costs.</p>
+
+                    <ol class="steps">
+                        <li>
+                            <h4>Create GitHub Actions workflow</h4>
+                            <p>On push to <code>main</code>, authenticate via OIDC, discover ASG instance IPs, SSH in, and run <code>git pull</code> + restart Apache.</p>
+                            <div class="code-block"><pre># .github/workflows/deploy.yml
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::ACCOUNT:role/Capstone-GitHub-Actions-Role
+      # SSH deploy to all ASG instances...</pre></div>
+                        </li>
+                        <li>
+                            <h4>Configure CloudWatch Alarms</h4>
+                            <p>Create alarms for: EC2 CPU utilization &gt; 80%, ALB 5xx error rate &gt; 5%. Set SNS notification or email alert.</p>
+                        </li>
+                        <li>
+                            <h4>Enable CloudWatch Logs</h4>
+                            <p>Configure Apache access/error logs with 7-day retention. Install CloudWatch agent on EC2 if needed.</p>
+                        </li>
+                        <li>
+                            <h4>Set up AWS Budgets alert</h4>
+                            <p>Create a monthly cost budget aligned with Free Tier limits. Alert at 80% threshold via email.</p>
+                        </li>
+                        <li>
+                            <h4>Update README and deployment checklist</h4>
+                            <p>Document architecture diagram, setup steps, and a final pre-demo checklist in the GitHub README.</p>
+                        </li>
+                    </ol>
+
+                    <div class="callout callout-warning">
+                        <span class="callout-icon">⚠️</span>
+                        <div><strong>Free Tier watch</strong>CloudFront, ALB, and EC2 all have Free Tier limits. Set Budgets alerts early — unexpected charges are a common capstone surprise.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>GitHub Actions</span><span class="filename">phase4-github-actions.png</span></div>
+                        <img src="phase4-github-actions.png" data-filename="phase4-github-actions.png" alt="Successful GitHub Actions deploy">
+                        <div class="frame-caption">GitHub Actions workflow run — all steps green</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: GitHub Actions</h4>
+                        <span class="ph-filename">phase4-github-actions.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> GitHub → Actions → latest successful "Deploy to EC2 via ASG" workflow run with all steps passed.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>CloudWatch Alarms</span><span class="filename">phase4-cloudwatch-alarms.png</span></div>
+                        <img src="phase4-cloudwatch-alarms.png" data-filename="phase4-cloudwatch-alarms.png" alt="CloudWatch alarms configured">
+                        <div class="frame-caption">CloudWatch alarms for CPU and 5xx errors</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: CloudWatch Alarms</h4>
+                        <span class="ph-filename">phase4-cloudwatch-alarms.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> CloudWatch → Alarms. Show CPU &gt; 80% and ALB 5xx rate alarms with OK/ALARM state.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>AWS Budgets</span><span class="filename">phase4-budgets.png</span></div>
+                        <img src="phase4-budgets.png" data-filename="phase4-budgets.png" alt="AWS Budgets alert threshold">
+                        <div class="frame-caption">Budget alert configured for Free Tier monitoring</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: AWS Budgets</h4>
+                        <span class="ph-filename">phase4-budgets.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> AWS Budgets → your budget. Show monthly limit, current spend, and alert threshold percentage.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Deployment Checklist</span><span class="filename">phase4-deployment-checklist.png</span></div>
+                        <img src="phase4-deployment-checklist.png" data-filename="phase4-deployment-checklist.png" alt="README architecture diagram">
+                        <div class="frame-caption">README architecture diagram or final deployment checklist</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: Deployment Checklist</h4>
+                        <span class="ph-filename">phase4-deployment-checklist.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> GitHub README showing architecture diagram and deployment checklist sections.</div>
+                    </div>
+                </article>
+
+                <!-- ═══════════════ PHASE 5 ═══════════════ -->
+                <article class="phase-block" id="phase-5">
+                    <div class="phase-header">
+                        <div class="phase-number">5</div>
+                        <h2>Intern Presentation — Project Showcase</h2>
+                    </div>
+                    <p class="phase-goal"><strong>Goal:</strong> Present the completed project live using this site as the presentation deck. No separate slides required.</p>
+
+                    <div class="callout callout-tip">
+                        <span class="callout-icon">🎤</span>
+                        <div><strong>Live demo order</strong>Start on <a href="index.html">index.html</a> → problem statement → architecture → status badges → challenges &amp; lessons → this guide (Phases 1–4) → open CloudFront URL in new tab as final proof.</div>
+                    </div>
+
+                    <h3 style="font-size:1rem;font-weight:700;margin:24px 0 16px;">Presentation checklist</h3>
+                    <ul class="checklist">
+                        <li class="done"><span class="check-box">✓</span> State the problem: documentation for scalable AWS deployments</li>
+                        <li class="done"><span class="check-box">✓</span> Walk through architecture: CloudFront → ALB → EC2 + S3</li>
+                        <li><span class="check-box"></span> Explain security decisions: SG lockdown, OAC, HTTPS, least-privilege IAM</li>
+                        <li><span class="check-box"></span> Demo CI/CD: trigger a GitHub Actions run live or show last successful run</li>
+                        <li><span class="check-box"></span> Review Trello board: completed sprints and task history</li>
+                        <li><span class="check-box"></span> Live demo: access site via CloudFront HTTPS URL</li>
+                        <li><span class="check-box"></span> Discuss challenges faced and lessons learned</li>
+                        <li><span class="check-box"></span> Share GitHub repo and README setup guide</li>
+                    </ul>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Trello — Completed</span><span class="filename">phase5-trello-done.png</span></div>
+                        <img src="phase5-trello-done.png" data-filename="phase5-trello-done.png" alt="Trello board with completed tasks">
+                        <div class="frame-caption">Trello board with all capstone cards in Done column</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: Trello Completed Board</h4>
+                        <span class="ph-filename">phase5-trello-done.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> Trello board before presentation — most cards moved to Done column, showing project completion.</div>
+                    </div>
+
+                    <div class="screenshot-frame">
+                        <div class="frame-header"><span>Live Demo</span><span class="filename">phase5-live-demo.png</span></div>
+                        <img src="phase5-live-demo.png" data-filename="phase5-live-demo.png" alt="Live site on CloudFront URL">
+                        <div class="frame-caption">Full site loaded via CloudFront HTTPS URL during presentation</div>
+                    </div>
+                    <div class="screenshot-placeholder" style="display:none">
+                        <div class="ph-icon">📷</div>
+                        <h4>Screenshot needed: Live Demo</h4>
+                        <span class="ph-filename">phase5-live-demo.png</span>
+                        <div class="ph-instruction"><strong>Capture:</strong> During presentation — full browser window showing this documentation site loaded via your CloudFront HTTPS URL.</div>
+                    </div>
+                </article>
+
+                <!-- ═══════════════ RESOURCES ═══════════════ -->
+                <article class="phase-block" id="resources">
+                    <div class="phase-header">
+                        <div class="phase-number">📚</div>
+                        <h2>Resources &amp; Documentation</h2>
+                    </div>
+                    <p class="phase-goal">Official documentation for every AWS service used in this capstone project.</p>
+
+                    <div class="resource-grid">
+                        <a href="https://docs.aws.amazon.com/cloudfront/" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">☁️</span> Amazon CloudFront <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://docs.aws.amazon.com/elasticloadbalancing/" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">⚖️</span> Application Load Balancer <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://docs.aws.amazon.com/ec2/" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">🖥️</span> Amazon EC2 <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://docs.aws.amazon.com/acm/" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">🔒</span> AWS Certificate Manager <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">👤</span> AWS IAM <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://docs.aws.amazon.com/s3/" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">🪣</span> Amazon S3 <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://docs.github.com/en/actions" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">🔄</span> GitHub Actions <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://trello.com/guide" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">📋</span> Trello Guide <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">💰</span> AWS Budgets <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://aws.amazon.com/free" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">🆓</span> AWS Free Tier <span class="rl-arrow">↗</span>
+                        </a>
+                    </div>
+                </article>
+
+            </div><!-- /.guide-content -->
+        </div><!-- /.guide-layout -->
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <span class="footer-brand">Group 3 · Azubi AWS Bootcamp Capstone</span>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="YOUR_GITHUB_REPO_URL" target="_blank" rel="noopener">GitHub Repository</a></li>
+                <li><a href="https://docs.aws.amazon.com/cloudfront/" target="_blank" rel="noopener">CloudFront Docs</a></li>
+            </ul>
+            <p class="footer-copy">© 2026 Group 3 · Implementation Guide · Static assets from Amazon S3</p>
+        </div>
+    </footer>
+
+    <script src="app.js" defer></script>
+</body>
+</html>
