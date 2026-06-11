@@ -1,0 +1,51 @@
+name: Deploy to EC2 via ASG
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::343073438650:role/Capstone-GitHub-Actions-Role
+          aws-region: us-east-1
+
+      - name: Get ASG instance IPs
+        id: get-ips
+        run: |
+          IPS=$(aws ec2 describe-instances \
+            --region us-east-1 \
+            --filters \
+              "Name=tag:aws:autoscaling:groupName,Values=Capstone-ASG" \
+              "Name=instance-state-name,Values=running" \
+            --query "Reservations[*].Instances[*].PublicIpAddress" \
+            --output text)
+          echo "IPS=$IPS" >> $GITHUB_OUTPUT
+          echo "Found instances: $IPS"
+
+      - name: Deploy to all ASG instances
+        env:
+          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+        run: |
+          echo "$SSH_KEY" > /tmp/deploy_key
+          chmod 400 /tmp/deploy_key
+          for IP in ${{ steps.get-ips.outputs.IPS }}; do
+            echo "Deploying to $IP..."
+            ssh -i /tmp/deploy_key \
+              -o StrictHostKeyChecking=no \
+              ec2-user@$IP \
+              "cd /var/www/html && sudo git pull origin main && sudo systemctl restart httpd"
+            echo "Deployed to $IP successfully"
+          done
+          rm -f /tmp/deploy_key
