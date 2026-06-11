@@ -13,7 +13,7 @@ If you are a junior engineer looking to replicate a real-world cloud deployment,
 Our architecture separates the computing layer (EC2) from the static asset delivery layer (S3) and protects everything behind a global CDN (CloudFront). 
 
 ![AWS Architecture Diagram](./architecture.png)
-*(Note: Ensure your `architecture.png` file is in the root of this repository to view the diagram above!)*
+
 
 ### **How the Traffic Flows:**
 1. A user visits `https://cloud.badexhq.com`.
