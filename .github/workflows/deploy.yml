@@ -30,9 +30,9 @@ jobs:
               "Name=tag:aws:autoscaling:groupName,Values=Capstone-ASG" \
               "Name=instance-state-name,Values=running" \
             --query "Reservations[*].Instances[*].PublicIpAddress" \
-            --output text)
-          echo "IPS=$IPS" >> $GITHUB_OUTPUT
+            --output text | tr '\t\n' ' ' | xargs)
           echo "Found instances: $IPS"
+          echo "IPS=$IPS" >> $GITHUB_OUTPUT
 
       - name: Deploy to all ASG instances
         env:
