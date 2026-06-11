@@ -23,7 +23,7 @@ jobs:
 
     - name: Execute Deployment via SSM
       run: |
-        COMMAND_ID=$(aws ssm send-command --region us-east-1 --document-name "AWS-RunShellScript" --targets "Key=tag:aws:autoscaling:groupName,Values=Capstone-ASG" --parameters '{"commands":["cd /var/www/html","git pull origin main","chown -R apache:apache /var/www/html","systemctl restart httpd"]}' --comment "Automated CI/CD Deployment" --query "Command.CommandId" --output text)
+        COMMAND_ID=$(aws ssm send-command --region us-east-1 --document-name "AWS-RunShellScript" --targets "Key=tag:aws:autoscaling:groupName,Values=Capstone-ASG" --parameters '{"commands":["export HOME=/root","git config --global --add safe.directory /var/www/html","cd /var/www/html && git pull origin main && chown -R apache:apache /var/www/html && systemctl restart httpd && echo SUCCESS"]}' --comment "Automated CI/CD Deployment" --query "Command.CommandId" --output text)
         echo "Command ID: $COMMAND_ID"
-        sleep 15
+        sleep 20
         aws ssm list-command-invocations --region us-east-1 --command-id $COMMAND_ID --details --query "CommandInvocations[*].[InstanceId,Status,CommandPlugins[0].Output]" --output table
