@@ -1,51 +1,59 @@
-name: Deploy to EC2 via ASG
+name: Production Deployment Pipeline
+
+
 
 on:
-  push:
-    branches: [main]
 
-permissions:
-  id-token: write
-  contents: read
+  push:
+
+    branches:
+
+      - main
+
+
 
 jobs:
+
   deploy:
+
+    name: Deploy to Auto Scaling Fleet
+
     runs-on: ubuntu-latest
+
+
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
 
-      - name: Configure AWS credentials via OIDC
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: arn:aws:iam::343073438650:role/Capstone-GitHub-Actions-Role
-          aws-region: us-east-1
+    - name: Checkout Code
 
-      - name: Get ASG instance IPs
-        id: get-ips
-        run: |
-          IPS=$(aws ec2 describe-instances \
-            --region us-east-1 \
-            --filters \
-              "Name=tag:aws:autoscaling:groupName,Values=Capstone-ASG" \
-              "Name=instance-state-name,Values=running" \
-            --query "Reservations[*].Instances[*].PublicIpAddress" \
-            --output text | tr '\t\n' ' ' | xargs)
-          echo "Found instances: $IPS"
-          echo "IPS=$IPS" >> $GITHUB_OUTPUT
+      uses: actions/checkout@v3
 
-      - name: Deploy to all ASG instances
-        env:
-          SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
-        run: |
-          echo "$SSH_KEY" > /tmp/deploy_key
-          chmod 400 /tmp/deploy_key
-          for IP in ${{ steps.get-ips.outputs.IPS }}; do
-            echo "Deploying to $IP..."
-            ssh -i /tmp/deploy_key \
-              -o StrictHostKeyChecking=no \
-              ec2-user@$IP \
-              "cd /var/www/html && sudo git pull origin main && sudo systemctl restart httpd"
-            echo "Deployed to $IP successfully"
-          done
-          rm -f /tmp/deploy_key
+
+
+    - name: Configure AWS Credentials
+
+      uses: aws-actions/configure-aws-credentials@v2
+
+      with:
+
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+        aws-region: us-east-1
+
+
+
+    - name: Execute Deployment Script across ASG Fleet
+
+      run: |
+
+        aws ssm send-command \
+
+          --document-name "AWS-RunShellScript" \
+
+          --targets "Key=tag:aws:autoscaling:groupName,Values=Capstone-ASG" \
+
+          --parameters 'commands=["cd /var/www/html", "git pull origin main", "chown -R apache:apache /var/www/html", "systemctl restart httpd"]' \
+
+          --comment "Automated CI/CD Deployment from GitHub Actions"
