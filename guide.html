@@ -16,7 +16,7 @@
 
     <header class="site-nav">
         <div class="nav-inner">
-            <a href="index.html" class="nav-brand">
+            <a href="" class="nav-brand">
                 <span class="brand-icon">G3</span>
                 AWS Scale Docs
             </a>
@@ -82,7 +82,7 @@
                         </li>
                         <li>
                             <h4>Install and configure AWS CLI</h4>
-                            <p>Install the CLI locally and create a named profile for the capstone project.</p>
+                            <p>Follow the instructions in the AWS CLI installation guide to install the CLI locally and create a named profile for the capstone project.</p>
                             <div class="code-block"><pre>aws configure --profile capstone
 aws sts get-caller-identity --profile capstone</pre></div>
                             <div class="screenshot-frame">
@@ -132,7 +132,7 @@ aws sts get-caller-identity --profile capstone</pre></div>
                         </li>
                         <li>
                             <h4>Launch EC2 instance and configure security groups</h4>
-                            <p>Launch a <strong>t2.micro</strong> (Amazon Linux 2) in your chosen region. Security group: allow HTTP (80) and HTTPS (443) inbound. Install Apache:</p>
+                            <p>Launch a <strong>t3.micro</strong> (Amazon Linux 2) in your chosen region. Security group: allow HTTP (80) and HTTPS (443) inbound. Install Apache:</p>
                             <div class="code-block"><pre>sudo yum update -y
 sudo yum install -y httpd git
 sudo systemctl start httpd
@@ -140,14 +140,14 @@ sudo systemctl enable httpd</pre></div>
                             <div class="screenshot-frame">
                                 <div class="frame-header"><span>Step 5 — EC2 Launch</span><span class="filename">Screenshots/phase1-ec2-launch.png</span></div>
                                 <img src="Screenshots/phase1-ec2-launch.png" data-filename="Screenshots/phase1-ec2-launch.png" alt="EC2 instance running">
-                                <div class="frame-caption">EC2 console — running t2.micro with security group rules</div>
+                                <div class="frame-caption">EC2 console — running t3.micro with security group rules</div>
                             </div>
                             <div class="screenshot-placeholder" style="display:none">
                                 <div class="ph-icon">📷</div>
                                 <h4>Screenshot needed: EC2 Instance</h4>
                                 <p>Capture after launching and starting the web server instance.</p>
                                 <span class="ph-filename">Screenshots/phase1-ec2-launch.png</span>
-                                <div class="ph-instruction"><strong>Capture:</strong> EC2 → Instances. Show instance state "running", instance type t2.micro, and security group with HTTP/HTTPS rules.</div>
+                                <div class="ph-instruction"><strong>Capture:</strong> EC2 → Instances. Show instance state "running", instance type t3.micro, and security group with HTTP/HTTPS rules.</div>
                             </div>
                         </li>
                         <li>
@@ -244,7 +244,7 @@ sudo chown -R apache:apache /var/www/html</pre></div>
                         </li>
                         <li>
                             <h4>Set up Auto Scaling Group</h4>
-                            <p>Create a Launch Template from your EC2 instance. ASG min=1, max=2, desired=1. Attach the Target Group for automatic registration.</p>
+                            <p>Create a Launch Template from your EC2 instance. ASG min=2, max=4, desired=2. Attach the Target Group for automatic registration.</p>
                             <div class="screenshot-frame">
                                 <div class="frame-header"><span>Step 5 — Auto Scaling Group</span><span class="filename">Screenshots/phase2-asg.png</span></div>
                                 <img src="Screenshots/phase2-asg.png" data-filename="Screenshots/phase2-asg.png" alt="Auto Scaling Group configuration">
@@ -447,7 +447,7 @@ jobs:
                         </li>
                         <li>
                             <h4>Enable CloudWatch Logs</h4>
-                            <p>Configure Apache access/error logs with 7-day retention. Install CloudWatch agent on EC2 if needed.</p>
+                            <p>Follow the instructions in the CloudWatch Logs guide(https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStart.html) to configure Apache access/error logs with 7-day retention. Install CloudWatch agent on EC2 if needed.</p>
                         </li>
                         <li>
                             <h4>Set up AWS Budgets alert</h4>
