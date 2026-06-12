@@ -13,10 +13,13 @@
 <body>
     <a href="#main" class="skip-link">Skip to content</a>
     <div class="scroll-progress" aria-hidden="true"></div>
+    <button type="button" class="print-pdf-btn no-print" id="print-pdf-btn" aria-label="Save this guide as PDF">
+        Save as PDF
+    </button>
 
     <header class="site-nav">
         <div class="nav-inner">
-            <a href="" class="nav-brand">
+            <a href="index.html" class="nav-brand">
                 <span class="brand-icon">G3</span>
                 AWS Scale Docs
             </a>
@@ -37,6 +40,7 @@
             <aside class="guide-sidebar" aria-label="Guide navigation">
                 <h4>Phases</h4>
                 <ul>
+                    <li><a href="#doc-cover">Project Overview</a></li>
                     <li><a href="#phase-1">Phase 1 - Setup</a></li>
                     <li><a href="#phase-2">Phase 2 - Web App &amp; ALB</a></li>
                     <li><a href="#phase-3">Phase 3 - Security &amp; CDN</a></li>
@@ -53,7 +57,71 @@
                     <span class="section-label">Implementation Guide</span>
                     <h1 class="section-title">Five phases to a scalable AWS deployment</h1>
                     <p class="section-subtitle">Follow each phase in order. A screenshot appears immediately after each task so you can confirm your console matches at every step.</p>
+                    <p class="print-hint no-print">Use <strong>Save as PDF</strong> (bottom-right) and enable <strong>Background graphics</strong> in the print dialog.</p>
                 </div>
+
+                <!-- ═══════════════ DOCUMENT COVER ═══════════════ -->
+                <section class="doc-cover phase-block" id="doc-cover">
+                    <div class="section-header" style="padding-top: 0;">
+                        <span class="section-label">Group 3 · Capstone Project</span>
+                        <h2 class="section-title">Azubi AWS Cloud Engineering Capstone</h2>
+                        <p class="section-subtitle">
+                            End-to-end scalable web deployment on AWS — documentation and live demo at
+                            <a href="https://cloud.badexhq.com" target="_blank" rel="noopener">cloud.badexhq.com</a>
+                        </p>
+                    </div>
+
+                    <h3 class="doc-cover-heading">Project links</h3>
+                    <div class="project-links">
+                        <a href="https://github.com/Aliu2211/azubi_capsotone_project" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">🐙</span> GitHub Repository <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://trello.com/invite/b/6a298406dc68fb103fcae7cc/ATTI2d8cfce0c3cc90226343fe0d2de45af9CCC20F9C/capstone-project-1" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">📋</span> Trello Board <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://cloud.badexhq.com" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">🌍</span> Live CloudFront URL <span class="rl-arrow">↗</span>
+                        </a>
+                    </div>
+
+                    <h3 class="doc-cover-heading">Architecture overview</h3>
+                    <div class="arch-image-wrap">
+                        <img src="architecture.png"
+                             alt="AWS Architecture Diagram — CloudFront, ALB, EC2, S3, GitHub Actions">
+                        <p class="arch-image-caption">
+                            Static assets (CSS, JS, images) delivered directly from Amazon S3 via CloudFront
+                        </p>
+                    </div>
+
+                    <h3 class="doc-cover-heading">Team</h3>
+                    <div class="team-grid">
+                        <div class="team-member">
+                            <div class="avatar">AT</div>
+                            <div class="name">Aliu Tijani</div>
+                            <div class="role">AWS Console Admin</div>
+                        </div>
+                        <div class="team-member">
+                            <div class="avatar">MA</div>
+                            <div class="name">Manu Adam Onyina</div>
+                            <div class="role">AWS Console Admin</div>
+                        </div>
+                        <div class="team-member">
+                            <div class="avatar">FO</div>
+                            <div class="name">Freda Ofori</div>
+                            <div class="role">AWS Console Admin</div>
+                        </div>
+                        <div class="team-member">
+                            <div class="avatar">CO</div>
+                            <div class="name">Caleb Ohene Asare</div>
+                            <div class="role">AWS Console Admin</div>
+                        </div>
+                        <div class="team-member">
+                            <div class="avatar">RWS</div>
+                            <div class="name">Razak Watara Salifu</div>
+                            <div class="role">AWS Console Admin</div>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- ═══════════════ PHASE 1 ═══════════════ -->
                 <article class="phase-block" id="phase-1">
@@ -100,7 +168,9 @@ aws sts get-caller-identity --profile capstone</pre></div>
                         </li>
                         <li>
                             <h4>Create GitHub repository with branching strategy</h4>
-                            <p>Set up <code>main</code>, <code>develop</code>, and feature branches. Protect <code>main</code> with required pull request reviews.</p>
+                            <p>Set up <code>main</code>, <code>develop</code>, and feature branches at
+                                <a href="https://github.com/Aliu2211/azubi_capsotone_project" target="_blank" rel="noopener">github.com/Aliu2211/azubi_capsotone_project</a>.
+                                Protect <code>main</code> with required pull request reviews.</p>
                             <div class="screenshot-frame">
                                 <div class="frame-header"><span>Step 3 — GitHub Repo</span><span class="filename">Screenshots/phase1-github-repo.png</span></div>
                                 <img src="Screenshots/phase1-github-repo.png" data-filename="Screenshots/phase1-github-repo.png" alt="GitHub repository with branches">
@@ -116,7 +186,9 @@ aws sts get-caller-identity --profile capstone</pre></div>
                         </li>
                         <li>
                             <h4>Set up Trello board</h4>
-                            <p>Create columns: <strong>Backlog → In Progress → Review → Done</strong>. Add all capstone tasks from each phase.</p>
+                            <p>Create columns: <strong>Backlog → In Progress → Review → Done</strong> on the
+                                <a href="https://trello.com/invite/b/6a298406dc68fb103fcae7cc/ATTI2d8cfce0c3cc90226343fe0d2de45af9CCC20F9C/capstone-project-1" target="_blank" rel="noopener">Group 3 Trello board</a>.
+                                Add all capstone tasks from each phase.</p>
                             <div class="screenshot-frame">
                                 <div class="frame-header"><span>Step 4 — Trello Board</span><span class="filename">Screenshots/phase1-trello-board.png</span></div>
                                 <img src="Screenshots/phase1-trello-board.png" data-filename="Screenshots/phase1-trello-board.png" alt="Trello board with sprint columns">
@@ -261,6 +333,7 @@ sudo chown -R apache:apache /var/www/html</pre></div>
                             <h4>Upload static assets to S3</h4>
                             <div class="code-block"><pre>aws s3 cp style.css s3://capstone-s3-343073438650-us-east-1-an/style.css --profile capstone
 aws s3 cp app.js   s3://capstone-s3-343073438650-us-east-1-an/app.js   --profile capstone
+aws s3 cp architecture.png s3://capstone-s3-343073438650-us-east-1-an/architecture.png --profile capstone
 aws s3 sync Screenshots/ s3://capstone-s3-343073438650-us-east-1-an/Screenshots/ --profile capstone</pre></div>
                             <div class="screenshot-frame">
                                 <div class="frame-header"><span>Step 6 — S3 Static Assets</span><span class="filename">Screenshots/phase2-s3-static-assets.png</span></div>
@@ -447,7 +520,9 @@ jobs:
                         </li>
                         <li>
                             <h4>Enable CloudWatch Logs</h4>
-                            <p>Follow the instructions in the CloudWatch Logs guide(https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStart.html) to configure Apache access/error logs with 7-day retention. Install CloudWatch agent on EC2 if needed.</p>
+                            <p>Follow the instructions in the
+                                <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStart.html" target="_blank" rel="noopener">CloudWatch Logs guide</a>
+                                to configure Apache access/error logs with 7-day retention. Install CloudWatch agent on EC2 if needed.</p>
                         </li>
                         <li>
                             <h4>Set up AWS Budgets alert</h4>
@@ -506,10 +581,15 @@ jobs:
                         <li class="done"><span class="check-box">&#10003;</span> Walk through architecture: CloudFront → ALB → EC2 + S3</li>
                         <li class="done"><span class="check-box">&#10003;</span> Explain security decisions: SG lockdown, OAC, HTTPS, least-privilege IAM</li>
                         <li class="done"><span class="check-box">&#10003;</span> Demo CI/CD: trigger a GitHub Actions run live or show last successful run</li>
-                        <li class="done"><span class="check-box">&#10003;</span> Review Trello board: completed sprints and task history</li>
-                        <li class="done"><span class="check-box">&#10003;</span> Live demo: access site via CloudFront HTTPS URL</li>
+                        <li class="done"><span class="check-box">&#10003;</span> Review
+                            <a href="https://trello.com/invite/b/6a298406dc68fb103fcae7cc/ATTI2d8cfce0c3cc90226343fe0d2de45af9CCC20F9C/capstone-project-1" target="_blank" rel="noopener">Trello board</a>:
+                            completed sprints and task history</li>
+                        <li class="done"><span class="check-box">&#10003;</span> Live demo: access site via
+                            <a href="https://cloud.badexhq.com" target="_blank" rel="noopener">CloudFront HTTPS URL</a></li>
                         <li class="done"><span class="check-box">&#10003;</span> Discuss challenges faced and lessons learned</li>
-                        <li class="done"><span class="check-box">&#10003;</span> Share GitHub repo and README setup guide</li>
+                        <li class="done"><span class="check-box">&#10003;</span> Share
+                            <a href="https://github.com/Aliu2211/azubi_capsotone_project" target="_blank" rel="noopener">GitHub repo</a>
+                            and README setup guide</li>
                     </ul>
 
                     <div class="screenshot-frame">
@@ -567,8 +647,11 @@ jobs:
                         <a href="https://docs.github.com/en/actions" class="resource-link" target="_blank" rel="noopener">
                             <span class="rl-icon">🔄</span> GitHub Actions <span class="rl-arrow">↗</span>
                         </a>
-                        <a href="https://trello.com/guide" class="resource-link" target="_blank" rel="noopener">
-                            <span class="rl-icon">📋</span> Trello Guide <span class="rl-arrow">↗</span>
+                        <a href="https://github.com/Aliu2211/azubi_capsotone_project" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">🐙</span> GitHub Repository <span class="rl-arrow">↗</span>
+                        </a>
+                        <a href="https://trello.com/invite/b/6a298406dc68fb103fcae7cc/ATTI2d8cfce0c3cc90226343fe0d2de45af9CCC20F9C/capstone-project-1" class="resource-link" target="_blank" rel="noopener">
+                            <span class="rl-icon">📋</span> Trello Board <span class="rl-arrow">↗</span>
                         </a>
                         <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html" class="resource-link" target="_blank" rel="noopener">
                             <span class="rl-icon">💰</span> AWS Budgets <span class="rl-arrow">↗</span>
@@ -588,7 +671,9 @@ jobs:
             <span class="footer-brand">Group 3 · Azubi AWS Bootcamp Capstone</span>
             <ul class="footer-links">
                 <li><a href="index.html">Home</a></li>
-                <li><a href="YOUR_GITHUB_REPO_URL" target="_blank" rel="noopener">GitHub Repository</a></li>
+                <li><a href="https://github.com/Aliu2211/azubi_capsotone_project" target="_blank" rel="noopener">GitHub Repository</a></li>
+                <li><a href="https://trello.com/invite/b/6a298406dc68fb103fcae7cc/ATTI2d8cfce0c3cc90226343fe0d2de45af9CCC20F9C/capstone-project-1" target="_blank" rel="noopener">Trello Board</a></li>
+                <li><a href="https://cloud.badexhq.com" target="_blank" rel="noopener">Live Site</a></li>
                 <li><a href="https://docs.aws.amazon.com/cloudfront/" target="_blank" rel="noopener">CloudFront Docs</a></li>
             </ul>
             <p class="footer-copy">© 2026 Group 3 · Implementation Guide · Static assets from Amazon S3</p>
